@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Online Library Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+        }
+
+        .book-list, .add-book, .search-books {
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 10px;
+            width: 30%;
+            transition: background-color 0.2s;
+        }
+
+        .book-list:hover, .add-book:hover, .search-books:hover {
+            background-color: #f0f0f0;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        li:hover {
+            background-color: #e8e8e8;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #0056b3; 
+        }
+
+        input, button {
+            margin: 5px 0;
+            width: 100%;
+        }
+
+        #search {
+            width: 70%;
+        }
+
+        #warning {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;"><u>ONLINE LIBRARY MANAGEMENT SYSTEM</u></h1>
+    <div class="container">
+        <div class="book-list">
+            <h2>Book List</h2>
+            <ul id="book-list">
+                <li>To Kill a Mockingbird by Harper Lee (ISBN: 9780061120084)</li>
+                <li>1984 by George Orwell (ISBN: 9780451524935)</li>
+                <li>Pride and Prejudice by Jane Austen (ISBN: 9780486285831)</li>
+                <li>The Great Gatsby by F. Scott Fitzgerald (ISBN: 9780743273565)</li>
+                <li>The Catcher in the Rye by J.D. Salinger (ISBN: 9780316769488)</li>
+                <li>To the Lighthouse by Virginia Woolf (ISBN: 9780156907392)</li>
+                <li>Brave New World by Aldous Huxley (ISBN: 9780060850524)</li>
+                <li>Moby-Dick by Herman Melville (ISBN: 9781853260087)</li>
+                <li>The Lord of the Rings by J.R.R. Tolkien (ISBN: 9780544003415)</li>
+                <li>The Da Vinci Code by Dan Brown (ISBN: 9780307474278)</li>
+            </ul>
+        </div>
+        <div class="add-book">
+            <h2>Add New Book</h2>
+            <form id="add-book-form">
+                <input type="text" id="title" placeholder="Title" required>
+                <input type="text" id="author" placeholder="Author" required>
+                <input type="number" id="isbn" placeholder="ISBN" required>
+                <button type="submit">Add Book</button>
+                <p id="warning"></p>
+            </form>
+        </div>
+        <div class="search-books">
+            <h2>Search Books</h2>
+            <input type="text" id="search" placeholder="Search by Title or Author">
+            <button id="search-button">Search</button>
+        </div>
+    </div>
+
+    <script>
+        const bookList = document.getElementById("book-list");
+        const addBookForm = document.getElementById("add-book-form");
+        const warningMessage = document.getElementById("warning");
+
+        addBookForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const title = document.getElementById("title").value;
+            const author = document.getElementById("author").value;
+            const isbn = document.getElementById("isbn").value;
+
+            // Checking for duplicates
+            const bookItems = bookList.querySelectorAll("li");
+            let isDuplicate = false;
+
+            bookItems.forEach(function(bookItem) {
+                const bookText = bookItem.textContent;
+                if (bookText.includes(title) && bookText.includes(author) && bookText.includes(isbn)) {
+                    isDuplicate = true;
+                }
+            });
+
+            if (isDuplicate) {
+                warningMessage.textContent = "This book already exists!";
+            } else {
+
+                const listItem = document.createElement("li");
+                listItem.textContent = `${title} by ${author} (ISBN: ${isbn})`;
+                bookList.appendChild(listItem);
+
+                document.getElementById("title").value = "";
+                document.getElementById("author").value = "";
+                document.getElementById("isbn").value = "";
+                warningMessage.textContent = "";
+            }
+        });
+
+        document.getElementById("search-button").addEventListener("click", function() {
+            const searchText = document.getElementById("search").value.toLowerCase();
+            const bookItems = bookList.querySelectorAll("li");
+
+            bookItems.forEach(function(bookItem) {
+                const bookText = bookItem.textContent.toLowerCase();
+                if (bookText.includes(searchText)) {
+                    bookItem.style.display = "block";
+                } else {
+                    bookItem.style.display = "none";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
